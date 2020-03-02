@@ -16,6 +16,6 @@ class EntrySerializer(serializers.ModelSerializer):
 	#location = seraializers.ChoiceField(choices=location_choices)
 	class Meta:
 		model = Entry
-		fields = ('id', 'metric_type', 'location', 'date', 'metric_value')
+		fields = ('id', 'metric_type', 'location', 'year', 'month', 'metric_value')
 		
 	

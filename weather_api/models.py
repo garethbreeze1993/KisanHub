@@ -1,5 +1,5 @@
 from django.db import models
-
+import datetime
 location_choices = (
 ('UK', 'UK'),
 ('England', 'England'),
@@ -19,8 +19,15 @@ class Metric(models.Model):
 	value = models.SmallIntegerField()
 '''
 class Entry(models.Model):
-	date = models.DateField() # change to positive integer field and change field to year.
-	metric_type = models.CharField(choices=metric_choices, max_length=128)
-	metric_value = models.SmallIntegerField()
-	location = models.CharField(choices=location_choices, max_length=128)
+    year = models.PositiveSmallIntegerField()
+    month = models.PositiveSmallIntegerField() # need validation of some kind to check incorrect data not being passed in for month and year
+    date = models.DateField(editable=False)
+    metric_type = models.CharField(choices=metric_choices, max_length=128)
+    metric_value = models.SmallIntegerField()
+    location = models.CharField(choices=location_choices, max_length=128)
+	
+    def save(self, *args, **kwargs):
+        self.date = datetime.date(self.year, self.month, 1)
+        super().save(*args, **kwargs)
+        
 	

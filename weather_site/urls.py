@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from weather_api.views import entry_list
+from weather_api.views import entry_list, Entries_List_Filtered
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-	path('api/entries/', entry_list)
+	path('api/entries/', entry_list),
+	path('api/entries/metric_type/<str:metric_type>/', Entries_List_Filtered.as_view()),
+	path('api/entries/location/<str:location>/', Entries_List_Filtered.as_view()),
 ]

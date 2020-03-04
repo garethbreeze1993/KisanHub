@@ -1,4 +1,5 @@
 import requests
+import json
 from django.shortcuts import render
 from rest_framework import status, generics
 from rest_framework.decorators import api_view, permission_classes
@@ -38,18 +39,26 @@ class Entries_List_Filtered(generics.ListAPIView):
             return Entry.objects.all().order_by('date')
     
 def get_data_for_api(request):
-	form = EntryForm()
-	if request.method == 'POST':
-		if form.is_valid():
-			metric_type = form.metric_type
-			location = form.location
-			r = requests.get(f'https://s3.eu-west-2.amazonaws.com/interview-question-data/metoffice/{metric_type}-{location}.json')
-			if r.status_code == 200:
-				json_data = r.json()
-				for data in json_data:
-					requests.post('localhost:8000/api/entries', data=data)
+    if request.method == 'POST':
+        form = EntryForm(request.POST)
+        if form.is_valid():
+            metric_type = request.POST['metric_type']
+            location = request.POST['location']
+            r = requests.get(f'https://s3.eu-west-2.amazonaws.com/interview-question-data/metoffice/{metric_type}-{location}.json')
+            if r.status_code == 200:
+                json_data = r.json()
+                for data in json_data:
+                    data["location"] = location
+                    data["metric_type"] = metric_type
+                    data["metric_value"] = data['value']
+                    del data['value']
+                    print(data)
+                    requests.post('http://localhost:8000/api/entries/', json=data)
 					
-	return render(request, 'weather_api/form.html', {'form': form})
+    else:
+        form = EntryForm()
+					
+    return render(request, 'weather_api/form.html', {'form': form})
 				
         
 

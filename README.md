@@ -1,4 +1,3 @@
-The basic challenge on hackajob creating a phonebook using API to get data
 
 To run application 
 Create Directory and do a git clone to get the necessary files 

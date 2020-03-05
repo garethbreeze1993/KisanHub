@@ -11,5 +11,6 @@ To view all data sent to DRF API go to localhost:8000/api/entries, this is order
 
 To filter based on either location or metric type either type in 
 
-localhost:8000/api/metric_type/{metric_type} to flter by metric type
-localhost:8000/api/location/{location} to flter by location
+localhost:8000/api/metric_type/{metric_type} to filter by metric type
+
+localhost:8000/api/location/{location} to filter by location
